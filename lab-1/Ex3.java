@@ -5,7 +5,7 @@ public class Ex3 {
         int n = scanner.nextInt();
         int i = 0, s = 0;
         while(i <= n) {
-            if(i%3 == 0 && i%5 == 0) {
+            if(i%3 == 0 || i%5 == 0) {
                 s = s + i;
             }
             i = i + 1;
