@@ -49,7 +49,6 @@ public class Services {
         events.add(new Event(bands.get(0), locations.get(6), dates.get(6)));
         events.add(new Event(bands.get(0), locations.get(7), dates.get(7)));
         events.add(new Event(bands.get(1), locations.get(6), dates.get(8)));
-        audit.action("Generating events");
         return events;
     }
 
@@ -66,7 +65,6 @@ public class Services {
         tickets.add(new Ticket(170, events.get(8)));
         tickets.add(new Ticket(145, events.get(9)));
         tickets.add(new Ticket(130, events.get(10)));
-        audit.action("Generating tickets");
         return tickets;
     }
 
