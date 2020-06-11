@@ -1,15 +1,110 @@
 package VanzareBilete;
 
+import VanzareBilete.config.SetUpData;
+import VanzareBilete.repository.BandRepository;
+import VanzareBilete.repository.ClientRepository;
+import VanzareBilete.repository.DateRepository;
+import VanzareBilete.repository.LocationRepository;
+
 import java.io.IOException;
-import java.lang.reflect.AnnotatedArrayType;
 import java.util.ArrayList;
 
 public class Services {
 
     DataFiles data = DataFiles.getInstance();
     Audit audit = Audit.getInstance();
+    SetUpData setUpData = new SetUpData();
 
     public Services() {
+    }
+
+    public void loadDB () {
+        setUpData.deleteTables();
+        setUpData.setUp();
+        audit.action("Loading TicketsDB database");
+    }
+
+    public void showBandsDB () {
+        setUpData.displayBands();
+        audit.action("Display bands from database");
+    }
+
+    public void showLocationsDB () {
+        setUpData.displayLocations();
+        audit.action("Display locations from database");
+    }
+
+    public void showDatesDB() {
+        setUpData.displayDates();
+        audit.action("Display dates from database");
+    }
+
+    public void showClientDB () {
+        setUpData.displayClient();
+        audit.action("Display client from database");
+    }
+
+    public Date getDateDB (int id) {
+        DateRepository date = new DateRepository();
+        return date.getDateByID(id);
+    }
+
+    public void deleteDateDB (int id) {
+        DateRepository date = new DateRepository();
+        date.deleteDateByID(id);
+    }
+
+    public Location getLocationDB (int id) {
+        LocationRepository loc = new LocationRepository();
+        return loc.getLocationByID(id);
+    }
+
+    public void deleteLocationDB (int id) {
+        LocationRepository loc = new LocationRepository();
+        loc.deleteLocationByID(id);
+    }
+
+    public void addClientDB (String firstName, String lastName, int age, String phoneNo) {
+        setUpData.addClient(firstName, lastName, age, phoneNo);
+        audit.action("Add client to database");
+    }
+
+    public Client getClientDB (int id) {
+        ClientRepository client = new ClientRepository();
+        return client.getClientByID(id);
+    }
+
+    public void updateClientDB (String firstName, String lastName, int age, String phoneNo, int id) {
+        ClientRepository client = new ClientRepository();
+        client.updateClient(firstName, lastName, age, phoneNo, id);
+        audit.action("Update client from database");
+    }
+
+    public void deleteClientDB (int id) {
+        ClientRepository client = new ClientRepository();
+        client.deleteClientByID(id);
+        audit.action("Delete client from database");
+    }
+
+    public ArrayList<Event> generateEventsDB() {
+        ArrayList<Event> events = new ArrayList<>();
+        BandRepository b = new BandRepository();
+        LocationRepository l = new LocationRepository();
+        DateRepository d = new DateRepository();
+
+        events.add(new Event(b.getBandByID(1), l.getLocationByID(1), d.getDateByID(1)));
+        events.add(new Event(b.getBandByID(2), l.getLocationByID(1), d.getDateByID(1)));
+        events.add(new Event(b.getBandByID(1), l.getLocationByID(2), d.getDateByID(2)));
+        events.add(new Event(b.getBandByID(2), l.getLocationByID(3), d.getDateByID(3)));
+        events.add(new Event(b.getBandByID(1), l.getLocationByID(4), d.getDateByID(4)));
+        events.add(new Event(b.getBandByID(1), l.getLocationByID(5), d.getDateByID(5)));
+        events.add(new Event(b.getBandByID(1), l.getLocationByID(6), d.getDateByID(6)));
+        events.add(new Event(b.getBandByID(2), l.getLocationByID(5), d.getDateByID(5)));
+        events.add(new Event(b.getBandByID(1), l.getLocationByID(7), d.getDateByID(7)));
+        events.add(new Event(b.getBandByID(1), l.getLocationByID(8), d.getDateByID(8)));
+        events.add(new Event(b.getBandByID(2), l.getLocationByID(7), d.getDateByID(9)));
+        audit.action("Generating events from database");
+        return events;
     }
 
     public ArrayList<Band> loadBands () throws IOException {
@@ -49,6 +144,7 @@ public class Services {
         events.add(new Event(bands.get(0), locations.get(6), dates.get(6)));
         events.add(new Event(bands.get(0), locations.get(7), dates.get(7)));
         events.add(new Event(bands.get(1), locations.get(6), dates.get(8)));
+        audit.action("Generating events");
         return events;
     }
 
@@ -65,6 +161,7 @@ public class Services {
         tickets.add(new Ticket(170, events.get(8)));
         tickets.add(new Ticket(145, events.get(9)));
         tickets.add(new Ticket(130, events.get(10)));
+        audit.action("Generating tickets");
         return tickets;
     }
 
